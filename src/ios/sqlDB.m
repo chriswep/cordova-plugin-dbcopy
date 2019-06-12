@@ -64,11 +64,11 @@
 	}
 	
 	
-	//Get Database from www directory
+	//Get Database from public directory
 	NSString *sourceDB = @"";
-	if([src rangeOfString:@"www"].location != NSNotFound){
-		NSString *wwwDir = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"www"];
-		sourceDB = [wwwDir stringByAppendingPathComponent:dbname];
+	if([src rangeOfString:@"public"].location != NSNotFound){
+		NSString *publicDir = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"public"];
+		sourceDB = [publicDir stringByAppendingPathComponent:dbname];
 	} else {
 		if([src rangeOfString:@"file://"].location != NSNotFound){
 			sourceDB = [src stringByReplacingOccurrencesOfString:@"file://" withString:@""];
@@ -82,7 +82,7 @@
 	NSLog(@"[sqlDB] Source: %@",sourceDB);
 	NSLog(@"[sqlDB] Destination: %@",dbPath);
 	
-	//copy database from www directory to target directory
+	//copy database from public directory to target directory
 	if (!([fileManager copyItemAtPath:sourceDB toPath:dbPath error:&error])) {
 		NSLog(@"[sqlDB] Could not copy file from %@ to %@. Error = %@",sourceDB,dbPath,error);
 		[self sendPluginResponse:error.code msg:error.description err:YES callBackID:cid];
@@ -116,7 +116,7 @@
 	NSLog(@"[sqlDB] Dbname = %@",dbname);
 	NSLog(@"[sqlDB] location = %d",location);
 	
-	[self copyDb:location source:@"www" db:dbname callBackID:command.callbackId];
+	[self copyDb:location source:@"public" db:dbname callBackID:command.callbackId];
 	
 	// [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
@@ -317,7 +317,7 @@
 		}
 	}
 	if(copyContinue) {
-		//copy database from www directory to target directory
+		//copy database from public directory to target directory
 		if (!([fileManager copyItemAtPath:dbPath toPath:destination error:&error])) {
 			NSLog(@"[sqlDB] Could not copy file from %@ to %@. Error = %@",dbPath,destination,error);
 			[self sendPluginResponse:error.code msg:error.description err:YES callBackID:command.callbackId];
